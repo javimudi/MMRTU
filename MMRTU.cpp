@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include <SoftwareSerial.h>
+#include <MySoftwareSerial.h>
 #include "MMRTU.h"
 
 
@@ -67,7 +67,7 @@ void MMRTU::calculateCRC(void)
 }
 
 
-void MMRTU::sendPacket(SoftwareSerial mySerial)
+void MMRTU::sendPacket(MySoftwareSerial mySerial)
 {
     unsigned int bufferSize=7;
     int TxEnablePin = 3;    
@@ -89,7 +89,7 @@ void MMRTU::sendPacket(SoftwareSerial mySerial)
 
 
 // get the serial data from the buffer
-unsigned char * MMRTU::getData(SoftwareSerial mySerial)
+unsigned char * MMRTU::getData(MySoftwareSerial mySerial)
 {
   	unsigned char buffer = 0;
 	unsigned char overflowFlag = 0;
@@ -112,7 +112,7 @@ unsigned char * MMRTU::getData(SoftwareSerial mySerial)
 			buffer++;
 		}
       
-    delayMicroseconds(2400/5); // inter character time out
+    delayMicroseconds(2400); // inter character time out
   }
 	
 

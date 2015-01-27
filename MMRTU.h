@@ -2,7 +2,7 @@
 #define MMRTU_H
 #endif
 
-#include <SoftwareSerial.h>
+#include <MySoftwareSerial.h>
 
 // ModbusMasterRTU Library
 
@@ -19,7 +19,7 @@ class MMRTU {
     MMRTU(unsigned int id, unsigned char function, unsigned int address, unsigned int no_of_registers);
     void constructPacket(void);
     void calculateCRC(void);
-    void sendPacket(SoftwareSerial);
-    unsigned char * getData(SoftwareSerial);
+    void sendPacket(MySoftwareSerial);
+    unsigned char * getData(MySoftwareSerial);
     unsigned char * getFrame(void);
 };
