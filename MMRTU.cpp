@@ -1,15 +1,16 @@
 #include "Arduino.h"
-#include <MySoftwareSerial.h>
+#include <AltSoftSerial.h>
 #include "MMRTU.h"
 
 
-MMRTU::MMRTU(unsigned int id, unsigned char function, unsigned int address, unsigned int no_of_registers)
+MMRTU::MMRTU(unsigned int id, unsigned char function, unsigned int address, unsigned int no_of_registers, int TxEnablePin)
 {
 	_id = id;
 	_function = function;
 	_address = address;
 	_no_of_registers = no_of_registers;
 	unsigned char _frame[BUFFER_SIZE];
+	_TxEnablePin = TxEnablePin;
 	// _frame = MMRTU::constructPacket();
 	constructPacket();
 }
@@ -67,12 +68,10 @@ void MMRTU::calculateCRC(void)
 }
 
 
-void MMRTU::sendPacket(MySoftwareSerial mySerial)
+void MMRTU::sendPacket(AltSoftSerial mySerial)
 {
     unsigned int bufferSize=7;
-    int TxEnablePin = 3;    
-	// if (TxEnablePin > 1)
-		digitalWrite(TxEnablePin, HIGH);
+	digitalWrite(_TxEnablePin, HIGH);
 		
 	for (unsigned char i = 0; i < bufferSize; i++)
 		mySerial.write(_frame[i]);
@@ -83,13 +82,13 @@ void MMRTU::sendPacket(MySoftwareSerial mySerial)
 	delayMicroseconds(500); 
 	
 	// if (TxEnablePin > 1)
-	digitalWrite(TxEnablePin, LOW);
+	digitalWrite(_TxEnablePin, LOW);
 		
 }
 
 
 // get the serial data from the buffer
-unsigned char * MMRTU::getData(MySoftwareSerial mySerial)
+unsigned char * MMRTU::getData(AltSoftSerial mySerial)
 {
   	unsigned char buffer = 0;
 	unsigned char overflowFlag = 0;

@@ -2,7 +2,7 @@
 #define MMRTU_H
 #endif
 
-#include <MySoftwareSerial.h>
+#include <AltSoftSerial.h>
 
 // ModbusMasterRTU Library
 
@@ -14,12 +14,13 @@ class MMRTU {
     unsigned char _function;
     unsigned int _address;
     unsigned int _no_of_registers;
+    int _TxEnablePin;
     
   public:
-    MMRTU(unsigned int id, unsigned char function, unsigned int address, unsigned int no_of_registers);
+    MMRTU(unsigned int id, unsigned char function, unsigned int address, unsigned int no_of_registers, int TxEnablePin);
     void constructPacket(void);
     void calculateCRC(void);
-    void sendPacket(MySoftwareSerial);
-    unsigned char * getData(MySoftwareSerial);
+    void sendPacket(AltSoftSerial);
+    unsigned char * getData(AltSoftSerial);
     unsigned char * getFrame(void);
 };
