@@ -20,6 +20,22 @@ unsigned char * MMRTU::getFrame(void){
 	return _frame;
 }
 
+
+
+void MMRTU::setup(long baud, uint8_t config, uint8_t rxPin, uint8_t txPin, int soft) {
+
+    if(soft==1){
+        AltSoftSerial _mySerial = AltSoftSerial(rxPin,txPin);
+        _mySerial.begin(baud, config);
+        pinMode(_TxEnablePin, OUTPUT);
+        digitalWrite(_TxEnablePin, LOW);    
+    }
+    else {
+        Serial.begin(baud,config);
+    }
+}
+
+
 void MMRTU::constructPacket(void){
 
 	// unsigned int crc16;
@@ -64,7 +80,20 @@ void MMRTU::calculateCRC(void)
 
   _frame[6] = temp >> 8;
   _frame[7] = temp & 0xFF;
-  // return temp; // the returned value is already swopped - crcLo byte is first & crcHi byte is last
+  // return temp; // the returned value is already swapped - crcLo byte is first & crcHi byte is last
+}
+
+void MMRTU::sendPacket(void)
+{
+    unsigned int bufferSize=7;
+    digitalWrite(_TxEnablePin, HIGH);
+
+    Serial.write(_frame,bufferSize);            
+    Serial.flush();
+    
+    // if (TxEnablePin > 1)
+    digitalWrite(_TxEnablePin, LOW);
+        
 }
 
 
@@ -73,9 +102,7 @@ void MMRTU::sendPacket(AltSoftSerial mySerial)
     unsigned int bufferSize=7;
 	digitalWrite(_TxEnablePin, HIGH);
 		
-	for (unsigned char i = 0; i < bufferSize; i++)
-		mySerial.write(_frame[i]);
-		
+	mySerial.write(_frame,bufferSize);	
 	mySerial.flush();
 	
 	// allow a frame delay to indicate end of transmission
