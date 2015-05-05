@@ -147,7 +147,37 @@ unsigned char * MMRTU::getData(AltSoftSerial mySerial)
 }
 
 
+// get the serial data from the buffer
+unsigned char * MMRTU::getData(void)
+{
+  	unsigned char buffer = 0;
+	unsigned char overflowFlag = 0;
+	unsigned char response[BUFFER_SIZE];
+		
+  while (Serial.available())
+  {
+		// The maximum number of bytes is limited to the serial buffer size of 128 bytes
+		// If more bytes is received than the BUFFER_SIZE the overflow flag will be set and the 
+		// serial buffer will be red untill all the data is cleared from the receive buffer,
+		// while the slave is still responding.
+		if (overflowFlag) 
+			Serial.read();
+		else
+		{
+			if (buffer == BUFFER_SIZE)
+				overflowFlag = 1;
+				
+			response[buffer] = Serial.read();
+			buffer++;
+		}
+      
+    delayMicroseconds(2400); // inter character time out
+  }
+	
 
+	
+  return response;
+}
 
 
 
