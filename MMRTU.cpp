@@ -22,21 +22,21 @@ unsigned char * MMRTU::getFrame(void){
 
 
 
-void MMRTU::setup(long baud, uint8_t config, uint8_t rxPin, uint8_t txPin, int soft) {
+void MMRTU::setup(long baud, uint8_t config, uint8_t rxPin, uint8_t txPin) {
 
-    if(soft==1){
-        AltSoftSerial _mySerial = AltSoftSerial(rxPin,txPin);
-        _mySerial.begin(baud, config);
-        pinMode(_TxEnablePin, OUTPUT);
-        digitalWrite(_TxEnablePin, LOW);    
-    }
-    else {
-        Serial.begin(baud,config);
-    }
+    AltSoftSerial _mySerial = AltSoftSerial(rxPin,txPin);
+    _mySerial.begin(baud, config);
+    pinMode(_TxEnablePin, OUTPUT);
+    digitalWrite(_TxEnablePin, LOW);    
+    
+
 }
 
 void MMRTU::setup(long baud, uint8_t config) {
+    
     Serial.begin(baud,config);
+    pinMode(_TxEnablePin, OUTPUT);
+    digitalWrite(_TxEnablePin, LOW);    
 }
 
 void MMRTU::constructPacket(void){
