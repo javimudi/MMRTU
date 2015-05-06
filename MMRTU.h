@@ -19,6 +19,7 @@ class MMRTU {
   public:
     MMRTU(unsigned int id, unsigned char function, unsigned int address, unsigned int no_of_registers, int TxEnablePin);
     void setup(long baud, uint8_t config, uint8_t rxPin, uint8_t txPin, int soft);    
+    void setup(long baud, uint8_t config);    
     void constructPacket(void);
     void calculateCRC(void);
     void sendPacket(void);

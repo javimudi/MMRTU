@@ -35,6 +35,9 @@ void MMRTU::setup(long baud, uint8_t config, uint8_t rxPin, uint8_t txPin, int s
     }
 }
 
+void MMRTU::setup(long baud, uint8_t config) {
+    Serial.begin(baud,config);
+}
 
 void MMRTU::constructPacket(void){
 
